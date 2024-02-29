@@ -18,7 +18,7 @@ export default function Header() {
       {/* Icon web */}
       <Link
         to="/"
-        className="self-center  whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white"
+        className="self-center  whitespace-nowrap text-lg sm:text-xl md:text-xl lg:text-2xl font-semibold dark:text-white"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
           Dinomanh&apos;s
@@ -26,7 +26,7 @@ export default function Header() {
         Blog
       </Link>
 
-      {/* Search Form show when web*/}
+      {/* Search Form hidden show inline only lg*/}
       <form onSubmit={handleSubmit}>
         <TextInput
           type="text"
@@ -38,13 +38,13 @@ export default function Header() {
         />
       </form>
 
-      {/* Icon search show when phone devices */}
+      {/* Icon search hidden on website */}
       <Button className="w-12 h-10 lg:hidden" color="gray">
         <AiOutlineSearch />
       </Button>
 
       {/* Dark mode and Sign In on Header */}
-      <div className="flex gap-2 md:order-2">
+      <div className="flex gap-4 md:order-2">
         <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
           {theme === "light" ? <FaSun /> : <FaMoon />}
         </Button>
@@ -70,7 +70,9 @@ export default function Header() {
           </Dropdown>
         ) : (
           <Link to="/sign-in">
-            <Button gradientDuoTone="purpleToBlue">Sign In</Button>
+            <Button gradientDuoTone="purpleToBlue" outline>
+              Sign In
+            </Button>
           </Link>
         )}
         {/* Click to active Navbar.Collapse */}
@@ -81,13 +83,19 @@ export default function Header() {
       <Navbar.Collapse>
         <Navbar.Link active={path === "/"} as={"div"}>
           {/* <a/> duplicate -> div */}
-          <Link to="/">Home</Link>
+          <Link to="/" className="lg:text-lg">
+            Home
+          </Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/about"} as={"div"}>
-          <Link to="/about">About</Link>
+          <Link to="/about" className="lg:text-lg">
+            About
+          </Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/projects"} as={"div"}>
-          <Link to="/projects">Projects</Link>
+          <Link to="/projects" className="lg:text-lg">
+            Projects
+          </Link>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>
