@@ -1,26 +1,40 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); //stop refreshing page
 
-    if (formData.username && formData.email && formData.password) {
-      setLoading(false);
-      return setErrorMessage("Successfully submitted");
-    } else {
-      setLoading(false);
+    if (!formData.username || !formData.email || !formData.password) {
       return setErrorMessage("Please fill out all fields.");
     }
 
-    // navigate("/sign-in");
+    try {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        return setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      setErrorMessage(error.message);
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -69,6 +83,7 @@ export default function SignUp() {
                 type="text"
                 placeholder="Username"
                 id="username"
+                autoComplete="username"
                 onChange={handleChange}
               />
             </div>
@@ -80,6 +95,7 @@ export default function SignUp() {
                 type="email"
                 placeholder="name@company.com"
                 id="email"
+                autoComplete="email"
                 onChange={handleChange}
               />
             </div>
@@ -94,6 +110,7 @@ export default function SignUp() {
                 type="password"
                 placeholder="Password"
                 id="password"
+                autoComplete="password"
                 onChange={handleChange}
               />
             </div>
