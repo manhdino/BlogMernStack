@@ -1,38 +1,48 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
+import AutoRedirect from "../components/AutoRedirect";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [isSuccess, setIsSuccess] = useState(false);
+  //const navigate = useNavigate();
+
+  const hanldeMessage = (status, message) => {
+    setMessage(message);
+    setStatus(status);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); //stop refreshing page
 
-    if (!formData.username || !formData.email || !formData.password) {
-      return setErrorMessage("Please fill out all fields.");
-    }
+    // if (!formData.username || !formData.email || !formData.password) {
+    //   return hanldeMessage("failure", "Please fill out all fields.");
+    // }
 
     try {
       setLoading(true);
-      setErrorMessage(null);
+      hanldeMessage(null, null);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        setLoading(false);
+        return hanldeMessage("failure", data.message);
       }
       setLoading(false);
       if (res.ok) {
-        navigate("/sign-in");
+        hanldeMessage("success", data);
+        setIsSuccess(true);
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      hanldeMessage("failure", error.message);
       setLoading(false);
     }
   };
@@ -65,9 +75,9 @@ export default function SignUp() {
 
         {/* right */}
         <div className="flex-1">
-          {errorMessage && (
-            <Alert className="mb-5" color="failure">
-              {errorMessage}
+          {message && (
+            <Alert className="mb-5" color={status}>
+              {message} {isSuccess ? <AutoRedirect /> : null}
             </Alert>
           )}
 
@@ -92,7 +102,7 @@ export default function SignUp() {
             <div className="flex flex-col gap-1">
               <Label value="Your email" className="lg:text-base md:text-sm" />
               <TextInput
-                type="email"
+                type="text"
                 placeholder="name@company.com"
                 id="email"
                 autoComplete="email"

@@ -5,7 +5,8 @@ import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
-
+  const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  const isCheckEmail = reg.test(email);
   if (
     !username ||
     !email ||
@@ -15,55 +16,67 @@ export const signup = async (req, res, next) => {
     password === ""
   ) {
     next(errorHandler(400, "All fields are required"));
-  }
+  } else if (!isCheckEmail) {
+    next(errorHandler(400, "Email is not a valid email"));
+  } else {
+    try {
+      const checkUser = await User.findOne({
+        email: email,
+      });
+      if (checkUser !== null) {
+        next(errorHandler(400, "Email is already in use"));
+      }
+      const hashedPassword = bcryptjs.hashSync(password, 10);
 
-  const hashedPassword = bcryptjs.hashSync(password, 10);
+      const createdUser = await User.create({
+        username,
+        email,
+        password: hashedPassword,
+      });
 
-  const newUser = new User({
-    username,
-    email,
-    password: hashedPassword,
-  });
-
-  try {
-    await newUser.save();
-    res.json("Signup successful");
-  } catch (error) {
-    next(error);
+      if (createdUser) {
+        res.status(200).json("Create a new account successfully");
+      }
+    } catch (error) {
+      next(errorHandler(400, error));
+    }
   }
 };
 
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
-
+  const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  const isCheckEmail = reg.test(email);
   if (!email || !password || email === "" || password === "") {
     next(errorHandler(400, "All fields are required"));
-  }
+  } else if (!isCheckEmail) {
+    next(errorHandler(400, "Email is not a valid email"));
+  } else {
+    try {
+      const validUser = await User.findOne({ email });
+      if (!validUser) {
+        return next(errorHandler(404, "User not found"));
+      }
+      const validPassword = bcryptjs.compareSync(password, validUser.password);
+      if (!validPassword) {
+        return next(errorHandler(400, "Invalid password"));
+      }
+      const token = jwt.sign(
+        { id: validUser._id, isAdmin: validUser.isAdmin },
+        process.env.JWT_SECRET
+      );
 
-  try {
-    const validUser = await User.findOne({ email });
-    if (!validUser) {
-      return next(errorHandler(404, "User not found"));
+      const { password: pass, ...rest } = validUser._doc;
+
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json(rest);
+    } catch (error) {
+      next(error);
     }
-    const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) {
-      return next(errorHandler(400, "Invalid password"));
-    }
-    const token = jwt.sign(
-      { id: validUser._id, isAdmin: validUser.isAdmin },
-      process.env.JWT_SECRET
-    );
-
-    const { password: pass, ...rest } = validUser._doc;
-
-    res
-      .status(200)
-      .cookie("access_token", token, {
-        httpOnly: true,
-      })
-      .json(rest);
-  } catch (error) {
-    next(error);
   }
 };
 
