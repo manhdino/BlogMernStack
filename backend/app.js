@@ -9,7 +9,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 
 dotenv.config();
-const __dirname = path.resolve();
+
 mongoose
   .connect(process.env.MONGODB)
   .then(() => {
@@ -19,6 +19,7 @@ mongoose
     console.log(err);
   });
 
+const __dirname = path.resolve();
 const app = express();
 
 app.use(express.json()); //permission send JSON data
@@ -28,10 +29,10 @@ app.listen(3000, () => {
   console.log("Server is running on port 3000!");
 });
 
-app.use(express.static(path.join(__dirname, '/frontend/dist')));
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
 });
 
 app.use("/api/auth", authRoutes);
