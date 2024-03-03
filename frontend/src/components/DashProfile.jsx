@@ -1,6 +1,5 @@
 import { Alert, Button, TextInput } from "flowbite-react";
 import { Link } from "react-router-dom";
-//import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { useRef, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { app } from "../firebase";
