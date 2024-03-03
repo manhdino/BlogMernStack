@@ -1,8 +1,8 @@
 import { Button, Spinner } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-// import CallToAction from '../components/CallToAction';
-// import CommentSection from '../components/CommentSection';
+import LearnMore from "../components/LearnMore";
+import CommentSection from "../components/CommentSection";
 // import PostCard from '../components/PostCard';
 
 export default function PostPage() {
@@ -76,7 +76,7 @@ export default function PostPage() {
         alt={post && post.title}
         className="mt-10 p-3 max-h-[600px] w-full object-cover"
       />
-      <div className="flex justify-between mt-2 p-3 border-b border-slate-500  w-full text-xs">
+      <div className="flex justify-between mt-2 p-3 border-b border-slate-500 w-full text-xs">
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className="italic">
           {post && (post.content.length / 1000).toFixed(0)} mins read
@@ -86,10 +86,10 @@ export default function PostPage() {
         className="p-3 w-full post-content"
         dangerouslySetInnerHTML={{ __html: post && post.content }}
       ></div>
-      {/* <div className='max-w-4xl mx-auto w-full'>
-        <CallToAction />
+      <div className="max-w-4xl mx-auto w-full mt-3">
+        <LearnMore />
       </div>
-      <CommentSection postId={post._id} /> */}
+      <CommentSection postId={post._id} />
 
       <div className="flex flex-col justify-center items-center mb-5">
         <h1 className="text-xl mt-5">Recent articles</h1>
