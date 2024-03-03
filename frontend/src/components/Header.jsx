@@ -160,9 +160,9 @@ export default function Header() {
             About
           </Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/projects"} as={"div"}>
-          <Link to="/projects" className="lg:text-base">
-            Projects
+        <Navbar.Link active={path === "/posts"} as={"div"}>
+          <Link to="/posts" className="lg:text-base">
+            Blogs
           </Link>
         </Navbar.Link>
       </Navbar.Collapse>

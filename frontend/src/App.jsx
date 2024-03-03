@@ -5,12 +5,11 @@ import About from "./pages/About.jsx";
 import SignIn from "./pages/SignIn.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
-import Projects from "./pages/Projects.jsx";
+import Posts from "./pages/Posts.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute.jsx";
-import DashPosts from "./components/DashPosts.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
 import UpdatePost from "./pages/UpdatePost.jsx";
 import PostPage from "./pages/PostPage.jsx";
@@ -32,7 +31,7 @@ function App() {
             <Route path="/update-post/:postId" element={<UpdatePost />}></Route>
           </Route>
         </Route>
-        <Route path="/projects" element={<Projects />}></Route>
+        <Route path="/posts" element={<Posts />}></Route>
         <Route path="/post/:postSlug" element={<PostPage />}></Route>
       </Routes>
       <Footer />
