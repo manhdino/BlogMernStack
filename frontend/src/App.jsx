@@ -8,6 +8,11 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Projects from "./pages/Projects.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute.jsx";
+import DashPosts from "./components/DashPosts.jsx";
+import CreatePost from "./pages/CreatePost.jsx";
+import UpdatePost from "./pages/UpdatePost.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -17,7 +22,13 @@ function App() {
         <Route path="/about" element={<About />}></Route>
         <Route path="/sign-in" element={<SignIn />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
-        <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
+          <Route element={<OnlyAdminPrivateRoute />}>
+            <Route path="/create-post" element={<CreatePost />}></Route>
+            <Route path="/update-post/:postId" element={<UpdatePost />}></Route>
+          </Route>
+        </Route>
         <Route path="/projects" element={<Projects />}></Route>
       </Routes>
       <Footer />

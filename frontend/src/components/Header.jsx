@@ -3,15 +3,35 @@ import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
-
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
+import { signoutSuccess } from "../redux/user/userSlice";
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
   const path = useLocation().pathname;
-  const theme = "dark";
-  const currentUser = false;
+  const dispatch = useDispatch();
+  const { theme } = useSelector((state) => state.theme);
+
+  const { currentUser } = useSelector((state) => state.user);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(searchTerm);
+  };
+
+  const handleSignout = async () => {
+    try {
+      const res = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -92,6 +112,7 @@ export default function Header() {
           className="w-12 h-10 hidden sm:inline focus:ring-0 "
           color="gray"
           pill
+          onClick={() => dispatch(toggleTheme())}
         >
           {theme === "light" ? <FaSun /> : <FaMoon />}
         </Button>
@@ -113,7 +134,7 @@ export default function Header() {
               <Dropdown.Item>Profile</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignout}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/sign-in">
@@ -130,17 +151,17 @@ export default function Header() {
       <Navbar.Collapse>
         <Navbar.Link active={path === "/"} as={"div"}>
           {/* <a/> duplicate -> div */}
-          <Link to="/" className="lg:text-lg">
+          <Link to="/" className="lg:text-base">
             Home
           </Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/about"} as={"div"}>
-          <Link to="/about" className="lg:text-lg">
+          <Link to="/about" className="lg:text-base">
             About
           </Link>
         </Navbar.Link>
         <Navbar.Link active={path === "/projects"} as={"div"}>
-          <Link to="/projects" className="lg:text-lg">
+          <Link to="/projects" className="lg:text-base">
             Projects
           </Link>
         </Navbar.Link>

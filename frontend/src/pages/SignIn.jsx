@@ -109,7 +109,7 @@ export default function SignIn() {
               />
               <TextInput
                 type="password"
-                placeholder="********************"
+                placeholder="**********"
                 id="password"
                 autoComplete="password"
                 onChange={handleChange}
