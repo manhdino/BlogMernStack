@@ -68,8 +68,8 @@ export default function DashboardComp() {
   }, [currentUser]);
   return (
     <div className="p-5 md:mx-auto">
-      <div className="flex-wrap flex justify-evenly">
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+      <div className="flex-wrap flex justify-between mt-5 ">
+        <div className="flex  flex-col p-3 lg:min-w-[350px] dark:bg-slate-800 gap-4 md:w-72  rounded-md shadow-md">
           <div className="flex justify-between">
             <div className="">
               <h3 className="text-gray-500 text-md uppercase">Total Users</h3>
@@ -85,7 +85,7 @@ export default function DashboardComp() {
             <div className="text-gray-500">Last month</div>
           </div>
         </div>
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+        <div className="flex flex-col p-3 lg:min-w-[350px] dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
           <div className="flex justify-between">
             <div className="">
               <h3 className="text-gray-500 text-md uppercase">
@@ -103,7 +103,7 @@ export default function DashboardComp() {
             <div className="text-gray-500">Last month</div>
           </div>
         </div>
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
+        <div className="flex flex-col p-3 lg:min-w-[350px] dark:bg-slate-800 gap-4 md:w-72 w-full rounded-md shadow-md">
           <div className="flex justify-between">
             <div className="">
               <h3 className="text-gray-500 text-md uppercase">Total Posts</h3>

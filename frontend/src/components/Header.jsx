@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,14 +8,28 @@ import { toggleTheme } from "../redux/theme/themeSlice";
 import { signoutSuccess } from "../redux/user/userSlice";
 export default function Header() {
   const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
   const path = useLocation().pathname;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { theme } = useSelector((state) => state.theme);
 
   const { currentUser } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(searchTerm);
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
   };
 
   const handleSignout = async () => {
@@ -155,14 +169,14 @@ export default function Header() {
             Home
           </Link>
         </Navbar.Link>
-        <Navbar.Link active={path === "/about"} as={"div"}>
-          <Link to="/about" className="lg:text-base">
-            About
-          </Link>
-        </Navbar.Link>
         <Navbar.Link active={path === "/posts"} as={"div"}>
           <Link to="/posts" className="lg:text-base">
             Blogs
+          </Link>
+        </Navbar.Link>
+        <Navbar.Link active={path === "/about"} as={"div"}>
+          <Link to="/about" className="lg:text-base">
+            About
           </Link>
         </Navbar.Link>
       </Navbar.Collapse>
